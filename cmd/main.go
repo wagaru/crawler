@@ -11,8 +11,8 @@ import (
 
 func main() {
 	ctx := context.Background()
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", crawler.ParseAll); err != nil {
-		log.Fatalf("funcframework.RegisterHTTPFunctionContext: %v\n", err)
+	if err := funcframework.RegisterEventFunctionContext(ctx, "/", crawler.ParseAll); err != nil {
+		log.Fatalf("funcframework.RegisterEventFunctionContext: %v\n", err)
 	}
 	// Use PORT environment variable, or default to 8080.
 	port := "8080"
