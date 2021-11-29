@@ -67,3 +67,4 @@ gcloud functions deploy crawler --entry-point ParseAll --trigger-topic mbp --set
 
 # ref
 * [gcloud functions deploy syntax](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--trigger-topic)
+* [gcloud functions deploy use env](https://cloud.google.com/functions/docs/configuring/env-var)

@@ -84,7 +84,7 @@ func crawlAmazon() error {
 	defer fmt.Println("finished parsing amazon...")
 	targetUrl := "https://www.amazon.com/-/zh_TW/Google-WiFi-Mesh-%E7%B3%BB%E7%B5%B1-%E8%B7%AF%E7%94%B1%E5%99%A8%E5%8D%87%E7%B4%9A/dp/B08GG9CMLR/ref=sr_1_3?keywords=google+wifi+2020&qid=1637225228&qsid=139-3079787-0386448&sr=8-3&sres=B08GGBZNZ5%2CB08GG9CMLR%2CB07CZPQ9SV%2CB07YMJ57MB%2CB01MDJ0HVG%2CB07YMKD6SM%2CB0842VS9MM%2CB08MVDLVMT%2CB08M38C3LZ%2CB08M478JZF%2CB08P7ZTVLV%2CB07H7RQHF7%2CB08F1YPMS1%2CB081VXXC44%2CB073ZMDMKH%2CB08KTQ1J9H&srpt=NETWORKING_ROUTER"
 	c := colly.NewCollector()
-	c.OnHTML(`div[id=qualifiedBuybox_tlc_feature_div] `, func(e *colly.HTMLElement) {
+	c.OnHTML(`div[id=exports_desktop_qualifiedBuybox_tlc_feature_div],div[id=qualifiedBuybox_tlc_feature_div]`, func(e *colly.HTMLElement) {
 		data := strings.Join(e.ChildTexts(`table tr:first-child td`), `:`)
 		fmt.Println("[GOOGLE_WIFI] " + data)
 		mailContents = append(mailContents, mailContent{
@@ -93,13 +93,21 @@ func crawlAmazon() error {
 		})
 	})
 
-	c.OnHTML(`div[id=unqualifiedBuyBox]`, func(e *colly.HTMLElement) {
+	c.OnHTML(`div[id=exports_desktop_unqualifiedBuyBox],div[id=unqualifiedBuyBox]`, func(e *colly.HTMLElement) {
 		fmt.Println("[GOOGLE_WIFI] 完售")
 		mailContents = append(mailContents, mailContent{
 			"GOOGLE_WIFI:" + "完售",
 			"GOOGLE_WIFI:" + "完售",
 		})
 	})
+
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
+	})
+
+	// c.OnResponse(func(r *colly.Response) {
+	// 	fmt.Printf("%s\n", r.Body)
+	// })
 
 	c.Visit(targetUrl)
 	return nil
