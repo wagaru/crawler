@@ -61,7 +61,7 @@ func crawlApple() error {
 	c := colly.NewCollector()
 	c.OnHTML(`form[id=configuration-form]`, func(e *colly.HTMLElement) {
 		data := e.Attr("data-evar20")
-		if strings.Contains(data, "暫未發售") {
+		if strings.Contains(data, "暫未發售") || strings.Contains(data, "暫時無法提供") {
 			fmt.Println("[APPLE] 暫未發售")
 			mailContents = append(mailContents, mailContent{
 				"MBP 暫未發售",
